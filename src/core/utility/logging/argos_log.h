@@ -61,7 +61,7 @@ namespace argos {
    private:
 
       /** The stream to write to */
-      std::ostream& m_cStream;
+      std::ostream* m_cStream;
 
       /** The default output color */
       SLogColor m_sLogColor;
@@ -85,7 +85,7 @@ namespace argos {
       CARGoSLog(std::ostream& c_stream,
                 const SLogColor& s_log_color,
                 bool b_colored_output_enabled = true) :
-         m_cStream(c_stream),
+         m_cStream(&c_stream),
          m_sLogColor(s_log_color),
          m_bColoredOutput(b_colored_output_enabled) {
 #ifdef ARGOS_THREADSAFE_LOG
@@ -103,7 +103,7 @@ namespace argos {
          }
 #endif
          if(m_bColoredOutput) {
-            reset(m_cStream);
+            reset(*m_cStream);
          }
       }
 
@@ -120,11 +120,15 @@ namespace argos {
       }
 
       inline std::ostream& GetStream() {
-         return m_cStream;
+         return *m_cStream;
+      }
+
+      inline void SetStream(std::ostream& newStream) {
+	  m_cStream = &newStream;
       }
 
       inline void RedirectToFile(const std::string& str_fname) {
-         m_cStream.rdbuf(std::ofstream(str_fname.c_str(), std::ios::out | std::ios::trunc).rdbuf());
+         m_cStream->rdbuf(std::ofstream(str_fname.c_str(), std::ios::out | std::ios::trunc).rdbuf());
       }
 
 #ifdef ARGOS_THREADSAFE_LOG
@@ -151,7 +155,7 @@ namespace argos {
 #ifdef ARGOS_THREADSAFE_LOG
          *(m_vecStreams[m_mapStreamOrder.find(pthread_self())->second]) << c_stream;
 #else
-         m_cStream << c_stream;
+         *m_cStream << c_stream;
 #endif
          return *this;
       }
@@ -161,14 +165,14 @@ namespace argos {
 #ifdef ARGOS_THREADSAFE_LOG
             *(m_vecStreams[m_mapStreamOrder.find(pthread_self())->second]) << m_sLogColor << t_msg << reset;
 #else
-            m_cStream << m_sLogColor << t_msg << reset;
+            *m_cStream << t_msg << reset;
 #endif
          }
          else {
 #ifdef ARGOS_THREADSAFE_LOG
             *(m_vecStreams[m_mapStreamOrder.find(pthread_self())->second]) << t_msg;
 #else
-            m_cStream << m_sLogColor << t_msg << reset;
+            *m_cStream << t_msg << reset;
 #endif
          }
          return *this;
