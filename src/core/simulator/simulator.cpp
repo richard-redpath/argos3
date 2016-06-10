@@ -250,19 +250,22 @@ namespace argos {
          CRandom::RemoveCategory("argos");
       }
       /* Free up factory data */
-/*      CFactory<CMedium>::Destroy();
+      CFactory<CMedium>::Destroy();
       CFactory<CPhysicsEngine>::Destroy();
       CFactory<CVisualization>::Destroy();
       CFactory<CSimulatedActuator>::Destroy();
       CFactory<CSimulatedSensor>::Destroy();
       CFactory<CCI_Controller>::Destroy();
       CFactory<CEntity>::Destroy();
-      CFactory<CLoopFunctions>::Destroy(); */
+      CFactory<CLoopFunctions>::Destroy();
       /* Stop profiling and flush the data */
       if(IsProfiling()) {
          m_pcProfiler->Stop();
          m_pcProfiler->Flush(m_bHumanReadableProfile);
       }
+
+      m_mapControllerConfig.clear();
+      
       LOG.Flush();
       LOGERR.Flush();
    }

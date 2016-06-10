@@ -135,7 +135,7 @@ namespace argos {
       inline void Flush() {
          pthread_mutex_lock(&m_tMutex);
          for(size_t i = 0; i < m_vecStreams.size(); ++i) {
-            m_cStream << m_vecStreams[i]->str();
+            *m_cStream << m_vecStreams[i]->str();
             m_vecStreams[i]->str("");
          }
          pthread_mutex_unlock(&m_tMutex);
