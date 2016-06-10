@@ -36,9 +36,11 @@ namespace argos {
    }
 
    void* LaunchThreadBalanceLength(void* p_data) {
-      /* Set up thread-safe buffers for this new thread */
-      LOG.AddThreadSafeBuffer();
+#ifdef ARGOS_THREADSAFE_LOG
+       /* Set up thread-safe buffers for this new thread */
+       LOG.AddThreadSafeBuffer();
       LOGERR.AddThreadSafeBuffer();
+#endif
       /* Make this thread cancellable */
       pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
       pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);

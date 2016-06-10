@@ -112,6 +112,20 @@ namespace argos {
       LOGERR.Flush();
    }
 
+    void CSimulator::LoadExperimentFromString(const char* experiment)
+    {
+	Terminate();
+	Destroy();
+	/* Build configuration tree */
+	m_tConfiguration.Parse(experiment);
+	m_tConfigurationRoot = *m_tConfiguration.FirstChildElement();
+	/* Init the experiment */
+	Init();
+	Reset();
+	LOG.Flush();
+	LOGERR.Flush();
+    }
+    
    /****************************************/
    /****************************************/
 
@@ -236,14 +250,14 @@ namespace argos {
          CRandom::RemoveCategory("argos");
       }
       /* Free up factory data */
-      CFactory<CMedium>::Destroy();
+/*      CFactory<CMedium>::Destroy();
       CFactory<CPhysicsEngine>::Destroy();
       CFactory<CVisualization>::Destroy();
       CFactory<CSimulatedActuator>::Destroy();
       CFactory<CSimulatedSensor>::Destroy();
       CFactory<CCI_Controller>::Destroy();
       CFactory<CEntity>::Destroy();
-      CFactory<CLoopFunctions>::Destroy();
+      CFactory<CLoopFunctions>::Destroy(); */
       /* Stop profiling and flush the data */
       if(IsProfiling()) {
          m_pcProfiler->Stop();

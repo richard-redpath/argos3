@@ -36,8 +36,10 @@ namespace argos {
    }
 
    void* LaunchUpdateThreadBalanceQuantity(void* p_data) {
-      LOG.AddThreadSafeBuffer();
+#ifdef ARGOS_THREADSAFE_LOG
+       LOG.AddThreadSafeBuffer();
       LOGERR.AddThreadSafeBuffer();
+#endif
       CSpaceMultiThreadBalanceQuantity::SUpdateThreadData* psData = reinterpret_cast<CSpaceMultiThreadBalanceQuantity::SUpdateThreadData*>(p_data);
       psData->Space->UpdateThread(psData->ThreadId);
       return NULL;

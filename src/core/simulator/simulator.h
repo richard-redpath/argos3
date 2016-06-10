@@ -305,6 +305,15 @@ namespace argos {
        */
       void LoadExperiment();
 
+      /** 
+       * Loads the experiment configuration from the provided XML string.
+       * This function is the same as LoadExperiment() with the exception that
+       * the experiment file is ignored and the content is taken from the
+       * provided string.
+       */
+
+      void LoadExperimentFromString(const char* experiment);
+	
       /**
        * Initializes the experiment.
        * It works on the assumption that method LoadExperiment() has been called already.
